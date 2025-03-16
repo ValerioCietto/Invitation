@@ -8,18 +8,22 @@ let spaceship = { x: canvas.width / 2, y: canvas.height / 2, radius: 50 };
 let asteroids = [];
 let killCount = 0;
 
-function spawnAsteroid() {
-  let size = Math.random() * 20 + 20;
-  asteroids.push({
-    x: Math.random() * canvas.width,
-    y: -size,
-    size: size,
-    speed: Math.random() * 3 + 1,
-    redValue: 0,
-  });
+const boomSound = new Audio("boom.wav");
+
+function spawnAsteroids() {
+  for (let i = 0; i < 10; i++) {
+    let size = Math.random() * 20 + 20;
+    asteroids.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * (canvas.height * 0.1),
+      size: size,
+      speed: Math.random() * 3 + 1,
+      redValue: 0,
+    });
+  }
 }
 
-setInterval(spawnAsteroid, 1000);
+setInterval(spawnAsteroids, 1000);
 
 document.addEventListener("mousemove", (event) => {
   spaceship.x = event.clientX;
@@ -77,6 +81,8 @@ function checkLaserHits() {
       if (asteroid.size < 10) {
         asteroids.splice(index, 1);
         killCount++;
+        boomSound.currentTime = 0;
+        boomSound.play();
         if (killCount % 10 === 0) {
           spaceship.radius += 1;
         }
@@ -85,10 +91,17 @@ function checkLaserHits() {
   });
 }
 
+function drawKillCounter() {
+  ctx.fillStyle = "white";
+  ctx.font = "20px Arial";
+  ctx.fillText(`Killed Enemies: ${killCount}`, 20, 30);
+}
+
 function gameLoop() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawSpaceship();
   drawAsteroids();
+  drawKillCounter();
   checkLaserHits();
   requestAnimationFrame(gameLoop);
 }
