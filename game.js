@@ -19,7 +19,7 @@ let stars = [];
 let killCount = 0;
 let money = 0;
 
-const boomSound = new Audio("boom.wav");
+const boomSound = new Audio("boom.mp3");
 const pingSound = new Audio("ping.wav");
 
 function spawnStars() {
@@ -184,34 +184,53 @@ function drawAsteroids() {
 }
 
 function checkLaserHits() {
-  asteroids.forEach((asteroid, index) => {
+  let currentRays = 0;
+  const sortedAsteroids = asteroids.slice().sort((a, b) => a.size - b.size);
+
+  for (const element of sortedAsteroids) {
+    if (currentRays >= spaceship.rays) break;
+
+    const asteroid = element;
     let dx = asteroid.x - spaceship.x;
     let dy = asteroid.y - spaceship.y;
     let distance = Math.sqrt(dx * dx + dy * dy);
 
     if (distance < spaceship.radius) {
-      for (let i = 0; i < spaceship.rays; i++) {
-        ctx.strokeStyle = "red";
-        ctx.beginPath();
-        ctx.moveTo(spaceship.x, spaceship.y);
-        ctx.lineTo(asteroid.x, asteroid.y);
-        ctx.stroke();
-        ctx.closePath();
+      let color;
+      if (spaceship.finalWeapon) {
+        color = "white";
+      } else {
+        let intensity = Math.min(255, spaceship.rayPower * 25);
+        color = `rgb(255, ${255 - intensity}, ${255 - intensity})`;
       }
+      ctx.strokeStyle = color;
+      ctx.lineWidth = spaceship.finalWeapon
+        ? 100
+        : Math.max(1, spaceship.rayPower);
+      ctx.beginPath();
+      ctx.moveTo(spaceship.x, spaceship.y);
+      ctx.lineTo(asteroid.x, asteroid.y);
+      ctx.stroke();
+      ctx.lineWidth = 1;
+      ctx.closePath();
 
       let damage = spaceship.finalWeapon ? 100 : spaceship.rayPower;
       asteroid.size -= damage * 0.1;
       asteroid.redValue = Math.min(255, asteroid.redValue + 25);
+      currentRays++;
 
       if (asteroid.size < 10) {
-        asteroids.splice(index, 1);
-        killCount++;
-        money++;
-        boomSound.currentTime = 0;
-        boomSound.play();
+        let index = asteroids.indexOf(asteroid);
+        if (index > -1) {
+          asteroids.splice(index, 1);
+          killCount++;
+          money++;
+          boomSound.currentTime = 0;
+          boomSound.play();
+        }
       }
     }
-  });
+  }
 }
 
 function drawHUD() {
