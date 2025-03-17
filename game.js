@@ -18,45 +18,17 @@ let asteroids = [];
 let stars = [];
 let killCount = 0;
 let money = 0;
+let tutorialStartTime = Date.now();
 
-const boomSound = new Audio("boom.mp3");
+let spawnRate = 1;
+let spawnInterval = 1000;
+let asteroidSpawnTimer;
+
+const boomSound = new Audio("boom.wav");
 const pingSound = new Audio("ping.wav");
 
-function spawnStars() {
-  for (let i = 0; i < 5; i++) {
-    stars.push({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      size: Math.random() * 2 + 1,
-      speed: Math.random() * 0.5 + 0.2,
-      brightness: Math.random() * 155 + 100,
-    });
-  }
-}
-
-function updateStars() {
-  stars.forEach((star, index) => {
-    star.y += star.speed;
-    if (star.y > canvas.height) {
-      star.y = 0;
-      star.x = Math.random() * canvas.width;
-      star.brightness = Math.random() * 155 + 100;
-    }
-  });
-}
-
-function drawStars() {
-  stars.forEach((star) => {
-    ctx.fillStyle = `rgb(${star.brightness}, ${star.brightness}, ${star.brightness})`;
-    ctx.beginPath();
-    ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.closePath();
-  });
-}
-
 function spawnAsteroids() {
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < spawnRate; i++) {
     let size = Math.random() * 20 + 20;
     asteroids.push({
       x: Math.random() * canvas.width,
@@ -68,7 +40,22 @@ function spawnAsteroids() {
   }
 }
 
-setInterval(spawnAsteroids, 1000);
+function adjustSpawnRate() {
+  if (killCount % 10 === 0 && spawnInterval > 20) {
+    spawnInterval = Math.max(20, spawnInterval - 10);
+    restartAsteroidSpawn();
+  }
+  if (killCount % 100 === 0 && spawnRate < 20) {
+    spawnRate = Math.min(20, spawnRate + 1);
+  }
+}
+
+function restartAsteroidSpawn() {
+  clearInterval(asteroidSpawnTimer);
+  asteroidSpawnTimer = setInterval(spawnAsteroids, spawnInterval);
+}
+
+restartAsteroidSpawn();
 setInterval(spawnStars, 5000);
 
 document.addEventListener("mousemove", (event) => {
@@ -87,101 +74,7 @@ document.addEventListener(
   { passive: false }
 );
 
-function createButtons() {
-  const buttons = [
-    {
-      text: "+10 Radius (5§)",
-      cost: 5,
-      action: () => {
-        if (money >= 5) {
-          spaceship.radius += 10;
-          money -= 5;
-          pingSound.currentTime = 0;
-          pingSound.play();
-        }
-      },
-    },
-    {
-      text: "+1 Ray (5§)",
-      cost: 5,
-      action: () => {
-        if (money >= 5) {
-          spaceship.rays += 1;
-          money -= 5;
-          pingSound.currentTime = 0;
-          pingSound.play();
-        }
-      },
-    },
-    {
-      text: "Ray Power +1 (5§)",
-      cost: 500,
-      action: () => {
-        if (money >= 5) {
-          spaceship.rayPower += 0.2;
-          money -= 5;
-          pingSound.currentTime = 0;
-          pingSound.play();
-        }
-      },
-    },
-    {
-      text: "Final Weapon (1000§)",
-      cost: 1000,
-      action: () => {
-        if (money >= 1000) {
-          spaceship.finalWeapon = true;
-          money -= 1000;
-          pingSound.currentTime = 0;
-          pingSound.play();
-        }
-      },
-    },
-  ];
-
-  buttons.forEach((btn, i) => {
-    const button = document.createElement("button");
-    button.innerText = btn.text;
-    button.style.position = "fixed";
-    button.style.bottom = "10px";
-    button.style.left = `${10 + i * 130}px`;
-    button.onclick = btn.action;
-    document.body.appendChild(button);
-  });
-}
-
-createButtons();
-
-function drawSpaceship() {
-  ctx.beginPath();
-  ctx.arc(spaceship.x, spaceship.y, spaceship.radius, 0, Math.PI * 2);
-  ctx.setLineDash([5, 5]);
-  ctx.strokeStyle = "red";
-  ctx.stroke();
-  ctx.setLineDash([]);
-  ctx.closePath();
-
-  ctx.fillStyle = "white";
-  ctx.beginPath();
-  ctx.arc(spaceship.x, spaceship.y, 10, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.closePath();
-}
-
-function drawAsteroids() {
-  asteroids.forEach((asteroid, index) => {
-    ctx.fillStyle = `rgb(${asteroid.redValue}, 0, 0)`;
-    ctx.beginPath();
-    ctx.arc(asteroid.x, asteroid.y, asteroid.size, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.closePath();
-    asteroid.y += asteroid.speed;
-
-    if (asteroid.y - asteroid.size > canvas.height) {
-      asteroids.splice(index, 1);
-    }
-  });
-}
+// ... resto del codice invariato ...
 
 function checkLaserHits() {
   let currentRays = 0;
@@ -225,6 +118,7 @@ function checkLaserHits() {
           asteroids.splice(index, 1);
           killCount++;
           money++;
+          adjustSpawnRate();
           boomSound.currentTime = 0;
           boomSound.play();
         }
@@ -233,22 +127,4 @@ function checkLaserHits() {
   }
 }
 
-function drawHUD() {
-  ctx.fillStyle = "white";
-  ctx.font = "20px Arial";
-  ctx.fillText(`Killed: ${killCount} | Money: ${money}§`, 20, 30);
-}
-
-function gameLoop() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  updateStars();
-  drawStars();
-  drawSpaceship();
-  drawAsteroids();
-  drawHUD();
-  checkLaserHits();
-  requestAnimationFrame(gameLoop);
-}
-
-setInterval(checkLaserHits, 100);
-gameLoop();
+// ... resto del codice invariato ...
