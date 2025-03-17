@@ -149,12 +149,12 @@ function createButtons() {
       },
     },
     {
-      text: "Final Weapon (1000§)",
-      cost: 1000,
+      text: "Final Weapon (10§)",
+      cost: 10,
       action: () => {
-        if (money >= 1000) {
+        if (money >= 10) {
           spaceship.finalWeapon = true;
-          money -= 1000;
+          money -= 10;
           pingSound.currentTime = 0;
           pingSound.play();
         }
@@ -208,6 +208,30 @@ function drawAsteroids() {
   });
 }
 
+function drawLightning(x1, y1, x2, y2) {
+  let segments = 5;
+  let offset = 20;
+  let points = [{ x: x1, y: y1 }];
+
+  for (let i = 1; i < segments; i++) {
+    let t = i / segments;
+    let nx = x1 + (x2 - x1) * t + (Math.random() - 0.5) * offset;
+    let ny = y1 + (y2 - y1) * t + (Math.random() - 0.5) * offset;
+    points.push({ x: nx, y: ny });
+  }
+  points.push({ x: x2, y: y2 });
+
+  ctx.strokeStyle = "white";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(points[0].x, points[0].y);
+  for (let i = 1; i < points.length; i++) {
+    ctx.lineTo(points[i].x, points[i].y);
+  }
+  ctx.stroke();
+  ctx.closePath();
+}
+
 function checkLaserHits() {
   let currentRays = 0;
   const sortedAsteroids = asteroids.slice().sort((a, b) => a.size - b.size);
@@ -221,23 +245,18 @@ function checkLaserHits() {
     let distance = Math.sqrt(dx * dx + dy * dy);
 
     if (distance < spaceship.radius) {
-      let color;
       if (spaceship.finalWeapon) {
-        color = "white";
+        drawLightning(spaceship.x, spaceship.y, asteroid.x, asteroid.y);
       } else {
-        let intensity = Math.min(255, spaceship.rayPower * 25);
-        color = `rgb(255, ${255 - intensity}, ${255 - intensity})`;
+        ctx.strokeStyle = "red";
+        ctx.lineWidth = Math.max(1, spaceship.rayPower);
+        ctx.beginPath();
+        ctx.moveTo(spaceship.x, spaceship.y);
+        ctx.lineTo(asteroid.x, asteroid.y);
+        ctx.stroke();
+        ctx.lineWidth = 1;
+        ctx.closePath();
       }
-      ctx.strokeStyle = color;
-      ctx.lineWidth = spaceship.finalWeapon
-        ? 100
-        : Math.max(1, spaceship.rayPower);
-      ctx.beginPath();
-      ctx.moveTo(spaceship.x, spaceship.y);
-      ctx.lineTo(asteroid.x, asteroid.y);
-      ctx.stroke();
-      ctx.lineWidth = 1;
-      ctx.closePath();
 
       let damage = spaceship.finalWeapon ? 100 : spaceship.rayPower;
       asteroid.size -= damage * 0.1;
