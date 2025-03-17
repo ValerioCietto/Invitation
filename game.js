@@ -90,48 +90,48 @@ document.addEventListener(
 function createButtons() {
   const buttons = [
     {
-      text: "+10 Radius (10§)",
-      cost: 10,
+      text: "+10 Radius (5§)",
+      cost: 5,
       action: () => {
-        if (money >= 10) {
+        if (money >= 5) {
           spaceship.radius += 10;
-          money -= 10;
+          money -= 5;
           pingSound.currentTime = 0;
           pingSound.play();
         }
       },
     },
     {
-      text: "+1 Ray (100§)",
-      cost: 100,
+      text: "+1 Ray (50§)",
+      cost: 50,
       action: () => {
-        if (money >= 100) {
+        if (money >= 50) {
           spaceship.rays += 1;
-          money -= 100;
+          money -= 50;
           pingSound.currentTime = 0;
           pingSound.play();
         }
       },
     },
     {
-      text: "Ray Power +1 (500§)",
+      text: "Ray Power +1 (50§)",
       cost: 500,
       action: () => {
-        if (money >= 500) {
+        if (money >= 50) {
           spaceship.rayPower += 1;
-          money -= 500;
+          money -= 50;
           pingSound.currentTime = 0;
           pingSound.play();
         }
       },
     },
     {
-      text: "Final Weapon (10000§)",
-      cost: 10000,
+      text: "Final Weapon (1000§)",
+      cost: 1000,
       action: () => {
-        if (money >= 10000) {
+        if (money >= 1000) {
           spaceship.finalWeapon = true;
-          money -= 10000;
+          money -= 1000;
           pingSound.currentTime = 0;
           pingSound.play();
         }
