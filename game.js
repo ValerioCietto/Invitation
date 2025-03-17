@@ -149,12 +149,12 @@ function createButtons() {
       },
     },
     {
-      text: "Final Weapon (10§)",
-      cost: 10,
+      text: "Final Weapon (1000§)",
+      cost: 1000,
       action: () => {
-        if (money >= 10) {
+        if (money >= 1000) {
           spaceship.finalWeapon = true;
-          money -= 10;
+          money -= 1000;
           pingSound.currentTime = 0;
           pingSound.play();
         }
