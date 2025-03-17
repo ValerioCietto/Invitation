@@ -114,12 +114,12 @@ function createButtons() {
       },
     },
     {
-      text: "Ray Power +1 (50§)",
+      text: "Ray Power +1 (5§)",
       cost: 500,
       action: () => {
-        if (money >= 50) {
-          spaceship.rayPower += 1;
-          money -= 50;
+        if (money >= 5) {
+          spaceship.rayPower += 0.2;
+          money -= 5;
           pingSound.currentTime = 0;
           pingSound.play();
         }
