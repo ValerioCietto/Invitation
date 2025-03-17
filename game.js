@@ -6,6 +6,9 @@ canvas.height = window.innerHeight;
 
 canvas.style.backgroundColor = "darkblue";
 
+const spaceshipImage = new Image();
+spaceshipImage.src = "spaceship.png";
+
 let spaceship = {
   x: canvas.width / 2,
   y: canvas.height / 2,
@@ -181,11 +184,13 @@ function drawSpaceship() {
   ctx.setLineDash([]);
   ctx.closePath();
 
-  ctx.fillStyle = "white";
-  ctx.beginPath();
-  ctx.arc(spaceship.x, spaceship.y, 10, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.closePath();
+  if (spaceshipImage.complete) {
+    ctx.drawImage(spaceshipImage, spaceship.x - 25, spaceship.y - 25, 50, 50);
+  } else {
+    spaceshipImage.onload = () => {
+      ctx.drawImage(spaceshipImage, spaceship.x - 25, spaceship.y - 25, 50, 50);
+    };
+  }
 }
 
 function drawAsteroids() {
