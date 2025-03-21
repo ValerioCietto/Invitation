@@ -89,7 +89,7 @@ h1{
                         <p class="card-text">
                             Se vi è arrivato questo invito, probabilmente li conoscete.
                         </p>
-                       <a  href="Partecipazione lv_20250320_203034_0000.pdf" class="card-button btn btn-success">Stampa l'invito</a>
+                       <a  href="Partecipazione1.pdf" class="card-button btn btn-success">Stampa l'invito</a>
                     </div>
                 </div>
             </div>
@@ -149,7 +149,7 @@ h1{
                 const base64 = "SVQxOFMwMzY2OTAxNjAwMjYyMjM4NjEwODM0Cg==";
                 const decoded = atob(base64);
                 const extraText = document.getElementById('extra-text');
-                extraText.textContent = decoded;
+                extraText.textContent = "Gradito bonifico a questo IBAN: " + decoded + " oppure busta contanti. Grazie!";
             });
         </script>
         
