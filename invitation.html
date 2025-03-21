@@ -125,7 +125,7 @@ h1{
 
                     <div class="card-body">
                         <h5 class="card-title">Ci sarai?</h5>
-                        <p class="card-text">Compila la tua partecipazione per farci sapere se parteciperai e hai esigenze particolari</p>
+                        <p class="card-text">Compila la tua partecipazione per farci sapere se parteciperai e hai esigenze particolari.</p>
                         <a  href="https://docs.google.com/forms/d/e/1FAIpQLSdDRW9-6PCDZpqItEYFMvaP3wAtLEJRulyrQWAzEp_jzTfuyA/viewform?usp=sf_link" class="card-button btn btn-success">Conferma partecipazione</a>
                     </div>
                 </div>  
@@ -135,10 +135,10 @@ h1{
                 <div class="card custom-card shadow">
 
                     <div class="card-body">
-                        <h5 class="card-title">Ma dove andate come luna di miele?</h5>
-                        <p class="card-text">Faremo un viaggio nelle isole Canarie</p>
+                        <h5 class="card-title">E come luna di miele?</h5>
+                        <p class="card-text">Destinazione ... Canarie!</p>
 
-                        <a class="card-button btn btn-success" id="reveal-button">Clicca qui per sapere come contribuire</a>
+                        <a class="card-button btn btn-success" id="reveal-button">Se ti facesse piacere contribuire, clicca qui</a>
                         <p class="card-text" id="extra-text"></p>
                     </div>
                 </div>    
@@ -149,7 +149,7 @@ h1{
                 const base64 = "SVQxOFMwMzY2OTAxNjAwMjYyMjM4NjEwODM0Cg==";
                 const decoded = atob(base64);
                 const extraText = document.getElementById('extra-text');
-                extraText.textContent = "Gradito bonifico a questo IBAN: " + decoded + " oppure busta contanti. Grazie!";
+                extraText.textContent = "Se preferite il bonifico, questo è il nostro IBAN: " + decoded + ". Grazie!";
             });
         </script>
         
