@@ -89,7 +89,7 @@ h1{
                         <p class="card-text">
                             Se vi è arrivato questo invito, probabilmente li conoscete.
                         </p>
-                       <a  href="Partecipazione.pdf" class="card-button btn btn-success">Stampa l'invito</a>
+                       <a  href="Partecipazione lv_20250320_203034_0000.pdf" class="card-button btn btn-success">Stampa l'invito</a>
                     </div>
                 </div>
             </div>
@@ -130,7 +130,28 @@ h1{
                     </div>
                 </div>  
             </div>
+
+            <div class="col-md-12">
+                <div class="card custom-card shadow">
+
+                    <div class="card-body">
+                        <h5 class="card-title">Ma dove andate come luna di miele?</h5>
+                        <p class="card-text">Faremo un viaggio nelle isole Canarie</p>
+
+                        <a class="card-button btn btn-success" id="reveal-button">Clicca qui per sapere come contribuire</a>
+                        <p class="card-text" id="extra-text"></p>
+                    </div>
+                </div>    
+            </div>
         </div>
+        <script>
+            document.getElementById('reveal-button').addEventListener('click', function() {
+                const base64 = "SVQxOFMwMzY2OTAxNjAwMjYyMjM4NjEwODM0Cg==";
+                const decoded = atob(base64);
+                const extraText = document.getElementById('extra-text');
+                extraText.textContent = decoded;
+            });
+        </script>
         
     </div>
     </div>
